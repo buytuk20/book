@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm -w run build:frontend",
+  "buildCommand": "cd artifacts/project-assembler && pnpm install --no-frozen-lockfile && pnpm run build:vercel",
   "outputDirectory": "dist",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": null,
