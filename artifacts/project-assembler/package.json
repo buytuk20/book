@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts",
-    "build:vercel": "vite build --config vite.config.ts && cp -r dist ../../dist || node -e \"const fs=require('fs');const path=require('path');const src=path.join(__dirname,'dist');const dst=path.join(__dirname,'..','..','dist');if(!fs.existsSync(dst))fs.mkdirSync(dst,{recursive:true});const copy=(s,d)=>{if(fs.statSync(s).isDirectory()){if(!fs.existsSync(d))fs.mkdirSync(d,{recursive:true});fs.readdirSync(s).forEach(f=>copy(path.join(s,f),path.join(d,f)))}else fs.copyFileSync(s,d)};if(fs.existsSync(src)){copy(src,dst);console.log('Copied to dist')}else{console.error('dist not found');process.exit(1)}\"",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "vercel-build": "vite build --config vite.config.ts"
