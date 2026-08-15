@@ -1,6 +1,21 @@
 {
   "version": 2,
-  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm --filter @workspace/project-assembler run build",
-  "outputDirectory": "artifacts/project-assembler/dist",
-  "installCommand": "pnpm install --no-frozen-lockfile"
+  "builds": [
+    {
+      "src": "artifacts/project-assembler/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
