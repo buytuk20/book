@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Project Assembler"
+description = "A local-first project workspace that preserves project trees, file contents, and project names on the same device without accounts or a backend."
+version = "1.0.0"
+id = "artifacts/project-assembler"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25065
+
+[services.development]
+run = "pnpm --filter @workspace/project-assembler run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/project-assembler", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/project-assembler/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25065"
+BASE_PATH = "/"
