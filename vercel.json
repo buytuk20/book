@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm -w run build:vercel",
+  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm -w run build:frontend",
   "outputDirectory": "dist",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": null,
