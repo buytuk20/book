@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd artifacts/project-assembler && pnpm install --no-frozen-lockfile && pnpm run build",
+  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm --filter @workspace/project-assembler run build",
   "outputDirectory": "artifacts/project-assembler/dist",
   "installCommand": "pnpm install --no-frozen-lockfile"
 }
