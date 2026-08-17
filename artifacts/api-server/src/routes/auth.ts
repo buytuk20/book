@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
     // Create user in Firestore
     const user = await registerUser(uid, email, body.username);
     
-    res.status(201).json({
+    return res.status(201).json({
       id: user.id,
       email: user.email,
       username: user.username,
@@ -40,7 +40,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Register error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
       user = await registerUser(uid, email, username);
     }
     
-    res.json({
+    return res.json({
       id: user.id,
       email: user.email,
       username: user.username,
@@ -74,7 +74,7 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(401).json({ error: "Invalid or expired token" });
+    return res.status(401).json({ error: "Invalid or expired token" });
   }
 });
 
@@ -87,7 +87,7 @@ router.get("/me", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    res.json({
+    return res.json({
       id: authResult.user.id,
       email: authResult.user.email,
       username: authResult.user.username,
@@ -95,7 +95,7 @@ router.get("/me", async (req, res) => {
     });
   } catch (error) {
     console.error("Get user error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 

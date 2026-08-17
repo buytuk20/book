@@ -33,10 +33,10 @@ router.get("/", authMiddleware, async (req: Request, res: Response) => {
       ...doc.data(),
     })) as Project[];
 
-    res.json(projects);
+    return res.json(projects);
   } catch (error) {
     console.error("Get projects error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -70,14 +70,14 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
       ...doc.data(),
     }));
 
-    res.json({
+    return res.json({
       id: projectDoc.id,
       ...project,
       files,
     });
   } catch (error) {
     console.error("Get project error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -107,13 +107,13 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
       ...projectDoc.data(),
     } as Project;
 
-    res.status(201).json(project);
+    return res.status(201).json(project);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Create project error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -151,13 +151,13 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
       ...updatedDoc.data(),
     } as Project;
 
-    res.json(updatedProject);
+    return res.json(updatedProject);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Update project error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -196,10 +196,10 @@ router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
     
     await batch.commit();
 
-    res.json({ message: "Project deleted successfully" });
+    return res.json({ message: "Project deleted successfully" });
   } catch (error) {
     console.error("Delete project error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 

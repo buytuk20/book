@@ -45,10 +45,10 @@ router.get("/project/:projectId", authMiddleware, async (req: Request, res: Resp
       ...doc.data(),
     })) as File[];
 
-    res.json(files);
+    return res.json(files);
   } catch (error) {
     console.error("Get files error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -76,13 +76,13 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
       return res.status(403).json({ error: "Forbidden" });
     }
 
-    res.json({
+    return res.json({
       id: fileDoc.id,
       ...file,
     });
   } catch (error) {
     console.error("Get file error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -133,13 +133,13 @@ router.post("/project/:projectId", authMiddleware, async (req: Request, res: Res
       ...fileDoc.data(),
     } as File;
 
-    res.status(201).json(file);
+    return res.status(201).json(file);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Create file error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -181,13 +181,13 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
       ...updatedDoc.data(),
     } as File;
 
-    res.json(updatedFile);
+    return res.json(updatedFile);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Update file error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -217,10 +217,10 @@ router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
 
     await db.collection('files').doc(fileId).delete();
 
-    res.json({ message: "File deleted successfully" });
+    return res.json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Delete file error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -280,13 +280,13 @@ router.post("/project/:projectId/bulk", authMiddleware, async (req: Request, res
       ...doc.data(),
     })) as File[];
 
-    res.status(201).json(files);
+    return res.status(201).json(files);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation error", details: error.errors });
     }
     console.error("Bulk create files error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
