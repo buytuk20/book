@@ -44,7 +44,7 @@ router.get("/", authMiddleware, async (req: Request, res: Response) => {
 router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.id;
+    const projectId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
     const projectDoc = await db.collection('projects').doc(projectId).get();
     
@@ -71,8 +71,8 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
     }));
 
     return res.json({
-      id: projectDoc.id,
       ...project,
+      id: projectDoc.id,
       files,
     });
   } catch (error) {
@@ -121,7 +121,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
 router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.id;
+    const projectId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
     const projectDoc = await db.collection('projects').doc(projectId).get();
     
@@ -138,7 +138,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
 
     const body = updateProjectSchema.parse(req.body);
     
-    const updateData: UpdateProjectData = {
+    const updateData: Record<string, any> = {
       ...body,
       updatedAt: Date.now(),
     };
@@ -165,7 +165,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
 router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.id;
+    const projectId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
     const projectDoc = await db.collection('projects').doc(projectId).get();
     

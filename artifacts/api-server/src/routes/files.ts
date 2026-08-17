@@ -21,7 +21,7 @@ const updateFileSchema = z.object({
 router.get("/project/:projectId", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.projectId;
+    const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
 
     // Check if project belongs to user
     const projectDoc = await db.collection('projects').doc(projectId).get();
@@ -56,7 +56,7 @@ router.get("/project/:projectId", authMiddleware, async (req: Request, res: Resp
 router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const fileId = req.params.id;
+    const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
     const fileDoc = await db.collection('files').doc(fileId).get();
     if (!fileDoc.exists) {
@@ -77,8 +77,8 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
     }
 
     return res.json({
-      id: fileDoc.id,
       ...file,
+      id: fileDoc.id,
     });
   } catch (error) {
     console.error("Get file error:", error);
@@ -90,7 +90,7 @@ router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
 router.post("/project/:projectId", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.projectId;
+    const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
     const body = createFileSchema.parse(req.body);
 
     // Check if project belongs to user
@@ -147,7 +147,7 @@ router.post("/project/:projectId", authMiddleware, async (req: Request, res: Res
 router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const fileId = req.params.id;
+    const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const body = updateFileSchema.parse(req.body);
 
     const fileDoc = await db.collection('files').doc(fileId).get();
@@ -168,7 +168,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
       return res.status(403).json({ error: "Forbidden" });
     }
 
-    const updateData: UpdateFileData = {
+    const updateData: Record<string, any> = {
       ...body,
       updatedAt: Date.now(),
     };
@@ -195,7 +195,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
 router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const fileId = req.params.id;
+    const fileId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
     const fileDoc = await db.collection('files').doc(fileId).get();
     if (!fileDoc.exists) {
@@ -228,7 +228,7 @@ router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
 router.post("/project/:projectId/bulk", authMiddleware, async (req: Request, res: Response) => {
   try {
     const uid = req.uid!;
-    const projectId = req.params.projectId;
+    const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
     const body = z.object({
       files: z.array(createFileSchema),
     }).parse(req.body);
